@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+    <title>This端口扫描</title>
+    <link rel="shortcut icon" href="scan.html" type="image/x-icon" />
+</head>
+<body>
+
+<div class="container">
+    <h1 class="page-header text-center">TCP端口扫描</h1>
+    <div class="container" style="font-family: 'Ubuntu', 'Lucida Grande', 'Lucida Sans Unicode', 'Geneva', 'Verdana', sans-serif">
+        <form action="{{ url_for('scanhtml') }}" method="post">
+            <div class="input-group row col-lg-5 col-lg-push-3">
+                <span class="input-group-addon"><span class="glyphicon glyphicon-console"></span></span>
+                <input type="text" class="form-control" name="ip" placeholder="请输入IP或域名" />
+            </div>
+            <br>
+            <div class="input-group row col-lg-5 col-lg-push-3" style="height: 100px">
+                <span class="input-group-addon"><span class="glyphicon glyphicon-pencil"></span></span>
+                <textarea class="form-control" name="ports" style="height: 100px" placeholder="请输入要扫描的端口号"></textarea>
+            </div>
+            <script></script>
+            <br>
+            <div>
+            <button class="btn btn-danger row col-lg-1 col-lg-push-7">Scan</button>
+            </div>
+            <h4 class="page-header text-center"><small>单个端口号请用逗号隔开，例：8080,  &nbsp;&nbsp; 多个端口号请用逗号隔开，例：8080,8081</small></h4>
+        </form>
+    </div>
+    <br><br>
+
+    {% for message in get_flashed_messages() %}
+        <di><h2 class="page-header text-center">{{ message }}</h2></div>
+    {% endfor %}
+
+    {% if show %}
+    <div class="container row col-lg-8 col-lg-push-2">
+    <div class="panel panel-success">
+        <div class="panel-heading panel-title text-center">您扫描的目标&nbsp; <kbd>{{ ip }}</kbd></div>
+        <div class="panel-body">
+        <h2 class="page-header text-center">OPen Ports</h2>
+        <div>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>端口</th>
+                    <th>状态</th>
+                    <th>通常应用</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for port in ports %}
+                <tr>
+                    <td><strong class="text-warning text-center">{{ port }}</strong></td>
+                    <td class="text-success"><strong>OPEN</strong></td>
+                    <td><strong class="text-success">
+
+                        {% if port == 21 %}FTP [应用]
+                        {% elif port == 22 %}SSH [应用]
+                        {% elif port == 3306 %}DB [数据库]
+                        {% elif port == 23 %}TelNet [应用]
+                        {% elif port == 80 %}HTTP [协议]
+                        {% elif port == 1521 %}Oracle [数据库]
+                        {% elif port == 443 %}HTTPS [协议]
+                        {% elif port == 25 %}E-mail SMTP [E-mail]
+                        {% elif port == 8080 %}JBOSS [应用]
+                        {% elif port == 3389 %}Windows 远程登陆 [应用]
+                        {% elif port == 37 %}time [时间协议]
+                        {% elif port == 53 %}DNS [协议]
+                        {% elif port == 1433 %}SQL Server [应用]
+                        {% elif port == 110 %}Email POP3 [E-mail]
+                        {% else %}<t class="text-danger">Unknown</t>
+                        {% endif %}
+                    </strong>
+                    </td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        </div>
+    </div>
+    </div>
+    {% else %}
+        <br>
+    {% endif %}
+</div>
+
+
+</body>
+</html>
