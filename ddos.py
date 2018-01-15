@@ -9,8 +9,6 @@ app.config['SECRET_KEY'] = 'HARD'
 @app.route('/scan/',methods=['GET','POST'])
 def pscan():
 
-    g.notscan = ['0.0.0.0','localhost'] # 禁止扫描的IP
-
     def scan(ip, ports):
 
         for port in ports:
