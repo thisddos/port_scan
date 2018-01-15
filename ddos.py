@@ -32,10 +32,19 @@ def pscan():
             # 禁止IP扫描,并且写入扫描者IP地址
             if '127.0' in session.get('ip') or '0.0.' in session.get('ip') or session.get('ip') == 'localhost':
                 session['ip'] = 0
-                flash('此 地址 禁止扫描，已留下禁止扫描记录')
-                req_ip = request.remote_addr
-                with f as open('notscanip.log','a'):
+
+                req_ip = request.remote_addr # 获取扫描者IP
+
+                # 准备写入扫描者IP
+                with open('./notscanip.log','a') as f:
+
+                    # 写入IP
                     f.write(str(req_ip) + str(datetime.datetime.now()))
+
+                # 返回flush消息
+                flash('此 地址 禁止扫描，已留下禁止扫描记录')
+
+                # 返回页面
                 return render_template('scan.html', show=False)
 
 
@@ -54,11 +63,10 @@ def pscan():
 
                 # 进行切片，并且每2个端口号添加一个线程
                 for run in range(int(len(ports)/2)+1):
-                    port = ports[:2]
-                    del ports[:2]
-                    Thread = threading.Thread(target=scan,args=(session.get('ip'),port))
-                    print(port)
-                    t_list.append(Thread)
+                    port = ports[:2] # 进行切片
+                    del ports[:2] # 删除之前的值
+                    Thread = threading.Thread(target=scan,args=(session.get('ip'),port)) # 创建线程
+                    t_list.append(Thread) # 添加线程到列表
 
                 # 运行线程
                 for thread in t_list:
@@ -68,8 +76,8 @@ def pscan():
                 for thread in t_list:
                     thread.join()
 
-                # 获取线程结果
-                g.ret = opport
+                # 获取线程结果，并且去重复
+                g.ret = sorted(set(opport),key=opport.index)
 
                 # 返回结果
                 return render_template('scan.html', show=True, ports=g.ret, ip=session.get('ip'))
