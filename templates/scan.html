@@ -12,7 +12,7 @@
 <div class="container">
     <h1 class="page-header text-center">TCP端口扫描</h1>
     <div class="container" style="font-family: 'Ubuntu', 'Lucida Grande', 'Lucida Sans Unicode', 'Geneva', 'Verdana', sans-serif">
-        <form action="{{ url_for('scanhtml') }}" method="post">
+        <form action="/scan/" method="post">
             <div class="input-group row col-lg-5 col-lg-push-3">
                 <span class="input-group-addon"><span class="glyphicon glyphicon-console"></span></span>
                 <input type="text" class="form-control" name="ip" placeholder="请输入IP或域名" />
@@ -20,7 +20,7 @@
             <br>
             <div class="input-group row col-lg-5 col-lg-push-3" style="height: 100px">
                 <span class="input-group-addon"><span class="glyphicon glyphicon-pencil"></span></span>
-                <textarea class="form-control" name="ports" style="height: 100px" placeholder="请输入要扫描的端口号"></textarea>
+                <input class="form-control" name="ports" style="height: 100px" placeholder="请输入要扫描的端口号" value="80,21,22,25,53,3389,3306,110," />
             </div>
             <script></script>
             <br>
